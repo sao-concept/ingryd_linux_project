@@ -1,93 +1,143 @@
-# Samba Installation Guide: Your Ultimate Guide to Effortless Cross-Platform File Sharing
+# Samba Server Installation Documentation
 
-## Introduction
-Ever found yourself struggling with file sharing between different operating systems? Enter Samba – an open-source wizard that effortlessly bridges the gap, enabling seamless file and print sharing across Windows, Linux, and Unix systems. In this guide, we'll embark on a journey to demystify the installation and configuration of Samba, empowering you to create a secure and efficient file-sharing service for your network.
+## A. Introduction
+### 1. Purpose
+The aim of this project is to set up and configure Samba, a cross-platform file-sharing tool.
 
-## Section 1: What's Samba All About?
-At its core, Samba is a suite of programs designed to make your life easier. It speaks the language of the Server Message Block (SMB) protocol, facilitating smooth communication between diverse operating systems. Imagine a world where your Linux server can effortlessly share files and printers with its Windows counterparts – that's the magic of Samba.
+### 2. Integration with Linux Server
+Setting up Samba as a Server facilitates resource sharing and exchange for work and collaboration efficiency.
 
-The idea of setting up a Server environment is to have a platform where resources could be shared among users on the same network, facilitating resources sharing and exchange for work and collaboration efficiency. Setting up Samba as a Server will help teams and aid collaboration as members could work remotely, exchange and utilize resources without physical presence, which could be a deterrent to workflow.
-
-## Section 2: Getting Started – Installation
-Before we dive into the Samba adventure, let's ensure your system is up-to-date. Fire up the terminal and type these commands:
-
+## B. Installation and Configuration
+### 1. Samba Installation
+**Step 1 – System Update**
 ```bash
 sudo apt update
-sudo apt upgrade
-Now, let's bring Samba into the mix by typing the following commands:
+Step 2 – Actual Samba Installation
 
 bash
 Copy code
 sudo apt install samba
-Confirm that Samba has successfully joined the party. Type these commands:
+2. Share Configuration
+Step 3 – Creating Directory for Sharing
 
 bash
 Copy code
-samba --version
-You should see a display similar to the below, depending on the version available at the time of installation.
-
-Section 3: Share Management and Configuration
-Now that you have confirmed the successful installation, it’s time to set the stage and create the directory where the file you intend to share with your group would be kept and accessed.
-
-Run the commands:
+sudo mkdir /share
+Step 4 – Creating Files to be Shared on the Network
 
 bash
 Copy code
-mkdir /path/to/shared/folder
-Next is to change the file permission. Run the following commands:
+sudo touch /share/file{1..5}
+Step 5 – Granting Permission Access
 
 bash
 Copy code
-chmod -R 770 /path/to/shared/folder
-The above command will recursively grant full permission to both user and group but none to others outside the categories.
+sudo chmod 777 /share
+N.B: The important access is the last 7, granting Read, Write, Execute to Others (Everyone on the network); other permissions are optional.
 
-It’s time to tailor the file-sharing experience by editing and customizing the global configuration file setting to match your network set-up.
-
-Run the following command:
+Step 6 – Editing Samba Configuration File
 
 bash
 Copy code
-sudo nano /etc/samba/smb.conf
-You may want to follow the below configuration for simplicity's sake:
+sudo vim /etc/samba/smb.conf
+Step 7 – Configuration File Settings
 
-bash
+conf
 Copy code
-[shared]
-path = /path/to/shared/folder
+[public-file]
+path = /share
+public = yes
+browseable = yes
 read only = no
-guest ok = yes
-Test to confirm there are no mistakes or errors with the configuration setting by running the commands:
+create mask = 0777
+directory mask = 0777
+    comment = "Public File Server"
+Save and exit (:wq)
 
-bash
-Copy code
-testparm
-If there are no errors or misconfigurations, you should see a display similar to the below.
+    Step 8 – Test Configuration
 
-Section 4: Starting Samba Daemon and NetBIOS(Network Basic Input/Output System) over IP naming services.
-Now run the following commands:
+    bash
+    Copy code
+    sudo testparm
+    Step 9 – Starting Samba
 
-bash
-Copy code
-sudo systemctl start smbd
-sudo systemctl enable smbd
-sudo systemctl start nmbd
-sudo systemctl enable nmbd
-Section 5: Add Users to the Samba Network and Create Password
-To do this, run the following commands:
+    bash
+    Copy code
+    sudo systemctl start smbd
+    sudo systemctl status smbd
+    sudo systemctl start nmbd
+    C. User Authentication
+    1. User Accounts
+    Step 10 – Creating User Accounts
 
-bash
-Copy code
-sudo smbpasswd -a username
-N.B: You can add as many users as you want, but be sure they are the necessary ones you want on the Samba network.
+    bash
+    Copy code
+    sudo useradd –s /sbin/nologin azeez
+    sudo useradd –s /sbin/nologin admin
+    sudo useradd –s /sbin/nologin tech
+    Step 11 – Assigning Password for Each User
 
-Section 6: Security and Access Controls – Allow Samba through Firewall
-Section 7: Connecting to Samba through Client
-Congratulations! You have just successfully created a Samba network file sharing. Now you and your group can connect through your various client machines. Understand that, despite Samba NFS (Network File Sharing) being cross-platform, the accessing procedure and commands vary.
+    bash
+    Copy code
+    sudo smbpasswd –a azeez
+    sudo smbpasswd –a admin
+    sudo smbpasswd –a tech
+    Step 12 – Log in to a Client’s Machine to Sync Samba
 
-Here are some of the commands for different OS (Operating Systems):
+    For Linux users:
+    Locate the "Files" application, click "Other Locations" at the bottom-left, then click. Below is a screenshot for clarity.
 
-    smb://server-ip/SharedFolder – Linux Distro
-smb://server-ip/SharedFolder – Linux Distro
-\\server-ip\SharedFolder – Window OS
+    Step 13 – Enter Server Address
 
-N.B: The actual format for Linux distros varies, so either of the options will work. So, try each out to know what work for your distro.
+    //smb:server-ip – Ubuntu Linux
+    smb://server-ip – RedHat Linux
+    \\server-ip – Windows OS
+    Step 14 – Proceed to Connect
+
+    Authentication is required using the created username and password on the Server.
+
+    D. Security and Access Controls
+    1. Firewall Configuration
+    Step 15 – Disable Firewall
+
+    bash
+    Copy code
+    sudo ufw disable
+    N.B: This was done on the Server to enable traffic flow on the Samba network.
+
+    2. Encryption and Authentication
+    File authentication applied was the chmod 777 on the /shared resources, ensuring only registered users on the Samba network have access.
+
+    E. Testing and Verification
+    1. Access Testing
+    Conducted tests on shared files from both Linux and Windows environments, including file modification and printing from a Windows environment.
+
+    2. Error Handling
+    Handled common errors related to mistyping server addresses for Windows and Linux environments.
+
+    F. Maintenance and Upgrades
+    1. Software Updates
+    Keep Samba server up-to-date for security and performance.
+
+    On Debian/Ubuntu:
+    bash
+    Copy code
+    sudo apt update 
+    sudo apt upgrade samba
+    On Red Hat/CentOS:
+    bash
+    Copy code
+    sudo yum update samba
+    2. Monitoring Samba
+    Methods for monitoring Samba, including viewing logs, using smbstatus, checking service status, monitoring system resources, and implementing external monitoring tools.
+
+    G. Troubleshooting
+    1. Logs and Diagnostics
+    Accessing and interpreting Samba logs, common Samba issues, and their solutions.
+
+    H. Integration with Other Services
+    1. LDAP or Active Directory Integration
+    LDAP Integration with Samba: Install required packages, configure LDAP client, edit Samba configuration for LDAP, and restart services.
+    Active Directory Integration with Samba: Install required packages, join Samba to the Active Directory domain, configure Winbind, configure PAM and NSSwitch, and restart services.
+    I. Conclusion
+    Summarizing the main points and providing additional considerations for successfully setting up and configuring Samba on a Linux server for file sharing. Regular monitoring, updates, and troubleshooting are crucial for optimal functionality.
