@@ -1,0 +1,95 @@
+ssh root@<ip_address>
+
+# Update and Upgrade Server
+apt update && apt upgrade
+
+# Set hostname
+hostnamectl set-hostname <your_hostname>
+
+# Verify hostname
+hostname
+
+# Edit hosts configuration file to make it persistent on system reboot
+nano /etc/hosts
+    <ip_address>    <your_hostname>
+
+# Create a user account for safety as against running as root user
+adduser <username>
+# OR: useradd -s /bin/bash -k /etc/skel -c "User Acc" -m <username>
+#     passwd <username>
+
+# Add user to sudo group
+adduser <username> sudo
+# OR: usermod -aG sudo <username>
+
+# Exit root login and re-login as the elevated user created
+exit
+ssh username@<ip_address>
+
+# Now login as a user with elevated privilege, set-up SSH Key-Based Authentication
+# Create a .ssh directory (ssh-copy-id is another option here)
+mkdir .ssh
+
+# Open Terminal on your local machine on a separate Tab
+# Inside your local Terminal, generate a SSH Key (for direct login
+# without password)
+ssh-keygen -b 4096
+
+# Copy the generated public-key to the remove server .ssh directory
+scp ~/.ssh/id_rsa.pub username@<ip_address>:~/.ssh/authorized_keys
+
+# Switch to your remote server Tab to verify the copied ssh public-key
+ls ~/.ssh
+
+# Update File permission over .ssh directory and files
+sudo chmod 700 ~/.ssh/
+sudo chmod 600 ~/.ssh/*
+
+# Exit from the remote Server to verify ssh working
+exit
+
+# Re-login to the remote from local Terminal
+ssh <username>@<ip_address>
+
+# After re-login and confirming the ssh-key is effective
+# Disallow root login over ssh by editing the sshd config file
+sudo nano /etc/ssh/sshd_config
+    PermitRootLogin     no
+    PasswordAuthentication      no
+
+# Restart ssh daemon 
+sudo systemctl restart sshd
+
+# Set-up Firewall
+sudo apt install ufw
+
+# Set-up Firewall Rules
+sudo ufw default allow outgoing
+sudo ufw default deny incoming
+sudo ufw allow ssh
+sudo ufw allow 5000
+sudo ufw enable
+sudo ufw status
+
+# Copy project/website directory from local Terminal to remote Server
+scp -r ~/<project_dir> <username>@<ip_address>:~/
+
+# Assuming the project is a python project
+# Install python3 packages on remote Server
+sudo apt install python3-pip
+
+# Install Python virtual environment
+sudo apt install python3-venv
+
+# Create Virtual Environment inside the project directory
+python3 -m venv <project_dir>/venv
+
+# Change directory into the project directory
+cd <project_dir>
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Install dependencies copied into the requirement.txt file using 'pip
+# freeze > requirement.txt' on the local machine
+pip install -r requirement.txt

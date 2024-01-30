@@ -1,0 +1,35 @@
+Step 1:
+    Register an account with any cloud hosting platform of your choice
+    (AWS EC2, Digital Ocean, Linode)
+Step 2:
+    Locate the dashboard of your cloud service choice
+Step 3:
+    Create an instance/Doplet/Linode of a linux server
+Step 4:
+    Choose a preferred image (Ubuntu, Debian, Arch, Fedora, CentOS, openSUSE)
+Step 5:
+    Choose a region clone to your target audience or any preferred one.
+Step 6:
+    Choose your preferred and affordable plan
+Step 7:
+    Give your image a label-name(name you will like your server to be identify with)
+Step 8:
+    Supply a root password
+Step 9: 
+    Optionally select Add-ons like 'Backups'(This is recommended for
+            production, but not compulsory for testing as it cost extra)
+Step 10:
+    Conclude by creating the instance/doplet/linode. Depending on the
+    platform you choose, in Linode, you click the CREATE button.
+Step 11:
+    Wait for Server to be Provision and up & running.
+Step 12:
+    Select the Server you just created and locate the NETWORKING Tab
+    (for Linode) and click
+Step 13:
+    Under ACCESS label, locate SSH Access, then copy the command with
+    the generated IP Address (ssh root@<ip_address>)
+Step 14:
+    Open the Terminal on your local machine (Linux OS)
+Step 15: 
+    Paste the copied SSH Access command to login into the just created remote server.
