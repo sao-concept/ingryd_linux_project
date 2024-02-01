@@ -1,0 +1,46 @@
+# Update App Source
+sudo apt update
+
+# Install SAMBA Server
+sudo apt -y install samba
+
+# Create Directory to be shared
+sudo mkdir /sharedDocs
+
+# Add test file to Directory (Optional)
+sudo tpuch /sharedDocs/file{1..5}.txt
+
+# Grant Permission
+sudo chmod -R 777 /sharedDocs
+
+# Edit Config File (/etc/samba/smb.conf)
+sudo nano /etc/samba/smb.conf
+
+# Add the following setting to the file
+    [public_file]
+    path = /sharedDocs
+    public = yes
+    browseable = yes
+    read only = no
+    create mask = 0777
+    directory mask = 0777
+    comment = "Public_File"
+
+# Test to check no error on setting
+sudo testperm
+
+# Allow Access from Firewall
+sudo ufw allow samba
+
+# Restart SAMBA Daemon
+sudo systemctl restart smbd
+sudo systemctl restart nmbd
+
+# Check Daemon Status
+sudo systemctl status smbd
+
+# Create Samba User(s) Account
+sudo useradd -s /sbin/nologin <username>
+
+# Set Samba User(s) Password
+sudo smbpasswd -a <username>

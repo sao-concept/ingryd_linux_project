@@ -1,0 +1,7 @@
+# This varies based on OS on the Client Machine, so either of the
+# following would work for Linux-Based/Unix-like Operating System
+//smb:<server_ip>
+smb://<server_ip>
+
+# For Window OS
+\\<server_ip>
