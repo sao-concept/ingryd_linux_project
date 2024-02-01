@@ -1,0 +1,20 @@
+# Make file deletion secured i.e. secure delete
+sudo chattr +s <file_name>
+
+# Undo file deletion secured
+sudo chattr -s <file_name>
+
+# Make file immutable / unchangeable 
+sudo chattr +i <file_name>
+
+# Undo immutable
+sudo chattr -i <file_name>
+
+# Make file append-only
+sudo chattr +a <file_name>
+
+# Undo append-only
+sudo chattr -a <file_name>
+
+# List attributes applied to file
+lsattr <file_name>
