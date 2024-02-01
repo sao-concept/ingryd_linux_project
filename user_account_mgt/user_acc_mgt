@@ -1,0 +1,43 @@
+# Create new user account
+sudo useradd -s /bin/bash -k /etc/skel -c "user_info" -m <username>
+
+# Assign Password for user
+sudo passwd <username>
+
+# Check User ID
+id <username>
+
+# Delete existing user
+sudo userdel -r <username>
+
+# Change User Group ID
+sudo usermod -g <new_gid> <username>
+
+# Add User to multiple groups
+sudo usermod -aG <grp1> <grp2> <grp3> <username>
+
+# Create new Group
+sudo addgroup <group_name>
+
+# Add member to group
+sudo usermod -aG <group_name> <username>
+
+# Switch to a specific group
+newgrp <grp_name>
+
+# Switch to default group
+newgrp
+
+# Remove user from a group
+sudo deluser <username> <grp_name>
+
+# Create Group with specific ID assign
+sudo groupadd -g <group_id> <new_group>
+
+# Modify existing group with new ID
+sudo groupmod -g <new_grp_id> <group>
+
+# Delete existing group
+sudo groupdel <group>
+
+

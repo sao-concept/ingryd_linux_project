@@ -1,0 +1,22 @@
+# Set User Access Control over file
+setfacl -m u:<username>:rw <file_name>
+
+# SetGID (Make files created inside a directory belong to Group by
+# default when created by any member belonging to the group)
+sudo chmod -R g+s <dir_name>
+
+# SetUID (Grant Access permission to file based on Owner permission)
+sudo chmod u+s <file_name>
+
+# Set Stickybit (Prevent members from deleting files belonging to
+# group, even if they are member of same group)
+sudo chmod -R +t <dir_name>
+
+# Set Group Ownership
+sudo chgrp <grp_name> <dir/filename>
+
+# Set File Permission
+sudo chmod 755 <file_name>
+
+# Change File Ownership
+sudo chown -R :<grp_name> <dir/filename>

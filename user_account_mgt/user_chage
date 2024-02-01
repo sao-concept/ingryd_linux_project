@@ -1,0 +1,11 @@
+# Show User Password Aging Info
+passwd -S <username>
+
+# Show User Password Aging Info in Full
+chage -l <username>
+
+# Set User Password Expiration to No-Expire
+chage -E -1 <username>
+
+# Set User Password to Expire on Specific Date
+chage -E <YYYY-MM-DD> <username>
