@@ -1,0 +1,27 @@
+# Update App Source
+sudo apt update
+
+# Install NFS Server
+sudo apt -y install nfs-kernel-server
+
+# Verify Server Status
+sudo systemctl status nfs-server
+
+# Create Directory to be Share
+sudo mkdir -p /exports/sharedDocs
+sudo mkdir -p /exports/backups
+
+# Edit NFS Configuration File (/etc/exports) for Server-Side
+sudo nano /etc/exports
+
+#   Add the following content to the config file
+    /exports/sharedDocs <client_ip>(rw, sync, no_subtree_check)
+    /exports/backups    <client_ip>(rw, sync, no_subtree_check)
+
+# Export the set-up
+exportfs -ar
+exportfs -v
+
+# Allow Access from Firewall
+sudo ufw allow from <client_ip> to any port nfs
+

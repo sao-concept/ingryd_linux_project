@@ -1,0 +1,27 @@
+# Update App Source
+sudo apt update
+
+# Install AUTOFS
+sudo apt -y install autofs
+
+# Check AUTOFS Daemon Status
+sudo systemctl status autofs
+
+# Edit Config File (/etc/auto.master)
+sudo nano /etc/auto.master
+
+# Add the following setting to the file
+    /mnt/nfs    /etc/auto.nfs   --ghost -timeout=60
+
+# Edit Config File (/etc/auto.nfs)
+sudo nano /etc/auto.nfs
+
+# Add the following setting to the file
+    sharedDocs -fstype=nfs4,rw <server_ip>:/exports/sharedDocs
+    backups -fstype=nfs4,rw <server_ip>:/exports/backups
+
+# Restart AUTOFS Daemon
+sudo systemctl restart autofs
+
+# Check Daemon Status
+sudo systemctl status autofs
