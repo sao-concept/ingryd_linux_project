@@ -1,0 +1,23 @@
+# Update App Source
+sudo apt update
+
+# Install MUTT Email Client
+sudo apt -y install mutt
+
+# Create Settings Directories and files
+mkdir -p ~/.mutt/cache/headers
+
+mkdir -p ~/.mutt/cache/bodies
+
+touch ~/.mutt/certificates
+
+# Create Config File and add <muttrcConfigSample.txt> file content into it, then 
+# modify or adjust accordinly
+nano ~/.mutt/muttrc
+
+# Refresh Config File to take effect
+source ~/.mutt/muttrc
+
+# Start MUTT
+mutt
+
