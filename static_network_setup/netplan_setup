@@ -1,0 +1,31 @@
+# Edit /etc/netplan/01-network-manager-all.yaml Config File
+sudo nano /etc/netplan/01-network-manager-all.yaml
+
+# Add the following setting to the file
+    network:
+        version: 2
+        renderer: NetworkManager
+        ethernets:
+            enp0s3:
+                dhcp4: no
+                addresses: [<ip_address>/24] # for a Class C network
+
+# Set YAML file Permission
+sudo chmod 600 /etc/netplan/01-network-manager-all.yaml
+
+# Verify no setting error
+sudo netplan try
+
+# Apply setting 
+sudo netplan apply
+
+# Verify change in network
+ip -a
+
+# Map Hostname to Ip Address on /etc/hosts Config File (Optional, but
+# necessary)
+sudo nano /etc/hosts
+
+# Add mapping
+    <ip_address>    <hostname>
+
